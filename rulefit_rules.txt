@@ -1,0 +1,835 @@
+RuleFit Rules for Reimbursement System
+==================================================
+
+Total number of rules: 103
+
+                                                                                                                                                                                                                                           rule    type        coef   support  importance
+0                                                                                                                                                                                                                            trip_duration_days  linear   29.323367  1.000000  115.070028
+1                                                                                                                                                                                                                                miles_traveled  linear    0.190350  1.000000   66.540924
+2                                                                                                                                                                                                                         total_receipts_amount  linear    0.035278  1.000000   26.136795
+3                                                                                                                    trip_duration_days > 2.5 & trip_duration_days <= 4.5 & miles_traveled > 526.5 & total_receipts_amount <= 822.8150024414062    rule   32.379004  0.024221    4.977820
+4                                                                                                                                                                         trip_duration_days <= 5.5 & total_receipts_amount > 832.3899841308594    rule    0.000000  0.259516    0.000000
+5                                                                                                  total_receipts_amount > 767.5050048828125 & trip_duration_days > 6.5 & total_receipts_amount <= 1023.0499877929688 & miles_traveled <= 504.5    rule  -68.816065  0.017301    8.972969
+6                                                                                                                                               trip_duration_days <= 5.5 & total_receipts_amount > 931.9200134277344 & miles_traveled <= 619.0    rule   58.947750  0.103806   17.979595
+7                                                                                                                                               total_receipts_amount <= 767.5050048828125 & trip_duration_days > 5.5 & miles_traveled <= 630.0    rule  -46.410830  0.114187   14.760411
+8                                                     total_receipts_amount > 822.8150024414062 & total_receipts_amount <= 848.3200073242188 & trip_duration_days > 4.5 & total_receipts_amount <= 1190.9049682617188 & miles_traveled <= 594.5    rule    0.000000  0.006920    0.000000
+9                                                                                                                                               trip_duration_days <= 4.5 & miles_traveled > 434.5 & total_receipts_amount <= 724.2099914550781    rule -127.838911  0.038062   24.461549
+10                                                                                      trip_duration_days <= 10.5 & miles_traveled <= 863.0 & trip_duration_days <= 7.5 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344    rule  118.251299  0.062284   28.577812
+11                                                                                                miles_traveled <= 593.5 & total_receipts_amount <= 543.0599975585938 & total_receipts_amount <= 931.9200134277344 & trip_duration_days <= 4.5    rule -118.448892  0.055363   27.087846
+12                                                                      trip_duration_days > 4.5 & miles_traveled <= 593.5 & trip_duration_days > 8.5 & total_receipts_amount <= 522.7000122070312 & total_receipts_amount <= 931.9200134277344    rule -113.422600  0.048443   24.351859
+13                                                                                                                                              miles_traveled <= 434.5 & trip_duration_days > 5.5 & total_receipts_amount <= 724.2099914550781    rule  -42.723609  0.076125   11.330186
+14                                                                                               total_receipts_amount > 767.5050048828125 & total_receipts_amount <= 1910.385009765625 & trip_duration_days <= 6.5 & trip_duration_days <= 1.5    rule  -17.526636  0.038062    3.353663
+15                                                           miles_traveled <= 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 708.4049987792969 & miles_traveled > 125.72000122070312 & total_receipts_amount <= 822.8150024414062    rule   -0.000000  0.058824    0.000000
+16                                                                                                                    total_receipts_amount > 865.6449890136719 & miles_traveled <= 849.0 & trip_duration_days > 4.5 & trip_duration_days > 9.5    rule   87.851744  0.124567   29.011090
+17                                                                                                 total_receipts_amount > 2392.7049560546875 & trip_duration_days <= 4.5 & miles_traveled <= 100.5 & total_receipts_amount > 822.8150024414062    rule    0.000000  0.003460    0.000000
+18                                                                                                                     miles_traveled <= 795.5 & trip_duration_days > 5.5 & total_receipts_amount > 724.2099914550781 & miles_traveled <= 788.0    rule   82.535285  0.249135   35.697510
+19                                                                                                                                               total_receipts_amount <= 865.6449890136719 & trip_duration_days > 3.5 & miles_traveled > 833.5    rule    5.942198  0.076125    1.575855
+20                                                                        miles_traveled <= 1020.0 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5 & total_receipts_amount > 691.6699829101562    rule  -15.215850  0.027682    2.496299
+21                                                                                                                           total_receipts_amount <= 767.5050048828125 & trip_duration_days <= 5.5 & total_receipts_amount > 96.60000228881836    rule  -22.843249  0.131488    7.719491
+22                                                                                                 total_receipts_amount <= 263.9649963378906 & total_receipts_amount <= 865.6449890136719 & trip_duration_days > 3.5 & miles_traveled <= 833.5    rule  -35.656381  0.041522    7.113280
+23                                                                                                                                              total_receipts_amount <= 865.6449890136719 & trip_duration_days <= 3.5 & miles_traveled > 787.5    rule   -0.000000  0.031142    0.000000
+24                                                                                                                                              total_receipts_amount <= 856.2049865722656 & trip_duration_days <= 3.5 & miles_traveled > 256.5    rule   -0.000000  0.083045    0.000000
+25                                                                                                                                                miles_traveled > 934.5 & total_receipts_amount > 856.2049865722656 & trip_duration_days > 5.5    rule   19.701215  0.089965    5.637152
+26   total_receipts_amount <= 1809.64501953125 & trip_duration_days > 6.0 & total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & miles_traveled > 934.5 & trip_duration_days > 4.5 & total_receipts_amount <= 880.7949829101562    rule    0.000000  0.006920    0.000000
+27                                                                                         trip_duration_days > 10.5 & miles_traveled <= 863.0 & miles_traveled <= 100.0 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344    rule   -0.000000  0.027682    0.000000
+28                                                                      total_receipts_amount > 1190.9049682617188 & total_receipts_amount > 822.8150024414062 & trip_duration_days > 11.5 & trip_duration_days > 4.5 & miles_traveled <= 594.5    rule   69.392839  0.044983   14.382786
+29                                                                                                                                                total_receipts_amount > 865.6449890136719 & miles_traveled > 849.0 & trip_duration_days > 4.5    rule   82.963492  0.145329   29.238986
+30                                                                                                  miles_traveled <= 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 822.8150024414062 & total_receipts_amount > 708.4049987792969    rule   -0.000000  0.013841    0.000000
+31                                                                      total_receipts_amount <= 1248.635009765625 & trip_duration_days <= 6.5 & trip_duration_days > 1.5 & total_receipts_amount > 767.5050048828125 & miles_traveled <= 614.0    rule   -0.389055  0.044983    0.080638
+32                                                                                                                  trip_duration_days <= 2.5 & trip_duration_days <= 4.5 & miles_traveled > 526.5 & total_receipts_amount <= 822.8150024414062    rule   -0.000000  0.024221    0.000000
+33                                                                                                                                                                                                   total_receipts_amount <= 870.8349914550781    rule   -0.820396  0.387543    0.399688
+34                                                                                                                    total_receipts_amount > 767.5050048828125 & miles_traveled > 614.0 & trip_duration_days <= 6.5 & trip_duration_days > 1.5    rule   93.021222  0.107266   28.785574
+35                                                                            total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & miles_traveled > 934.5 & total_receipts_amount > 1809.64501953125 & trip_duration_days > 4.5    rule   -0.000000  0.058824    0.000000
+36                                                     total_receipts_amount > 822.8150024414062 & trip_duration_days > 4.5 & total_receipts_amount <= 1190.9049682617188 & total_receipts_amount > 848.3200073242188 & miles_traveled <= 594.5    rule  -31.723975  0.038062    6.070277
+37                                                                                                                      miles_traveled > 594.5 & miles_traveled <= 934.5 & trip_duration_days > 4.5 & total_receipts_amount > 822.8150024414062    rule   48.643438  0.159170   17.795429
+38                                                                                                                                                                                                   total_receipts_amount <= 832.3899841308594    rule  -19.043533  0.314879    8.845104
+39                                                                                                                                               total_receipts_amount <= 767.5050048828125 & trip_duration_days > 5.5 & miles_traveled > 630.0    rule   24.247394  0.103806    7.395674
+40                                                                       total_receipts_amount <= 691.6699829101562 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5 & miles_traveled <= 1101.0    rule  -58.948661  0.107266   18.241763
+41                                                                                                                                               trip_duration_days <= 5.5 & total_receipts_amount > 931.9200134277344 & miles_traveled > 619.0    rule  130.853353  0.076125   34.701958
+42                                                                                                                                                trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344 & miles_traveled > 863.0    rule    1.516060  0.128028    0.506547
+43                                                    total_receipts_amount <= 2392.7049560546875 & total_receipts_amount > 822.8150024414062 & trip_duration_days <= 4.5 & total_receipts_amount > 2283.885009765625 & miles_traveled <= 100.5    rule -619.828530  0.003460   36.397367
+44                                                                                                                                                total_receipts_amount > 767.5050048828125 & trip_duration_days > 6.5 & miles_traveled > 504.5    rule   79.460970  0.235294   33.705953
+45                                                                                                                                                                                     trip_duration_days > 5.5 & total_receipts_amount > 859.0    rule    0.000000  0.401384    0.000000
+46                                                                                                                      miles_traveled <= 795.5 & miles_traveled > 788.0 & trip_duration_days > 5.5 & total_receipts_amount > 724.2099914550781    rule  -66.581378  0.003460    3.909770
+47                                                                                                                                             miles_traveled <= 434.5 & trip_duration_days <= 5.5 & total_receipts_amount <= 724.2099914550781    rule -134.097359  0.072664   34.809631
+48                                                                                                                                                          total_receipts_amount <= 859.0 & trip_duration_days > 4.5 & miles_traveled <= 558.0    rule   -0.000000  0.103806    0.000000
+49                                                                                                 miles_traveled <= 593.5 & total_receipts_amount <= 931.9200134277344 & trip_duration_days <= 4.5 & total_receipts_amount > 543.0599975585938    rule   -0.000000  0.027682    0.000000
+50                                                                                                                          total_receipts_amount > 865.6449890136719 & total_receipts_amount <= 1074.3150024414062 & trip_duration_days <= 4.5    rule -153.505017  0.027682   25.183894
+51                                                                                                                   total_receipts_amount > 865.6449890136719 & miles_traveled <= 849.0 & trip_duration_days > 4.5 & trip_duration_days <= 9.5    rule   42.916229  0.141869   14.974126
+52                                               total_receipts_amount <= 1809.64501953125 & total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & miles_traveled > 934.5 & trip_duration_days > 4.5 & trip_duration_days <= 6.0    rule    0.000000  0.003460    0.000000
+53                                                          miles_traveled <= 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 708.4049987792969 & miles_traveled <= 125.72000122070312 & total_receipts_amount <= 822.8150024414062    rule  -84.640868  0.027682   13.886104
+54                                                                                                                      miles_traveled > 835.5 & miles_traveled > 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 822.8150024414062    rule   56.457505  0.048443   12.121440
+55                                                                                                                                                miles_traveled > 795.5 & trip_duration_days > 5.5 & total_receipts_amount > 724.2099914550781    rule  162.835731  0.166090   60.601170
+56                                                                                                 total_receipts_amount > 520.5299987792969 & trip_duration_days <= 4.5 & total_receipts_amount <= 822.8150024414062 & miles_traveled <= 526.5    rule   -0.000000  0.017301    0.000000
+57                                                                        total_receipts_amount <= 691.6699829101562 & miles_traveled > 1101.0 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5    rule    0.000000  0.024221    0.000000
+58                                                                                                                                              miles_traveled <= 630.5 & total_receipts_amount > 856.2049865722656 & trip_duration_days <= 5.5    rule    5.840076  0.128028    1.951290
+59                                                                                                                                               total_receipts_amount > 856.2049865722656 & trip_duration_days > 5.5 & miles_traveled <= 934.5    rule   -0.000000  0.276817    0.000000
+60                                                                      total_receipts_amount > 822.8150024414062 & total_receipts_amount > 1398.1649780273438 & trip_duration_days <= 3.5 & miles_traveled > 100.5 & trip_duration_days <= 4.5    rule   -0.000000  0.086505    0.000000
+61                                                                                                                                                                                                    total_receipts_amount > 859.1199951171875    rule    0.000000  0.615917    0.000000
+62                                                                                                  total_receipts_amount <= 856.2049865722656 & trip_duration_days > 3.5 & miles_traveled > 677.0 & total_receipts_amount <= 495.4049987792969    rule  -40.829303  0.055363    9.337174
+63                                                                     total_receipts_amount > 1190.9049682617188 & total_receipts_amount > 822.8150024414062 & trip_duration_days > 4.5 & trip_duration_days <= 11.5 & miles_traveled <= 594.5    rule    0.000000  0.117647    0.000000
+64                                                                       trip_duration_days <= 6.5 & total_receipts_amount > 1248.635009765625 & trip_duration_days > 1.5 & total_receipts_amount > 767.5050048828125 & miles_traveled <= 614.0    rule  125.519406  0.055363   28.704788
+65                                                                                                                                                                                                    total_receipts_amount > 870.8349914550781    rule   49.414970  0.612457   24.074448
+66                                                                                                                                                                        total_receipts_amount <= 847.739990234375 & trip_duration_days <= 3.5    rule -119.525681  0.100346   35.912783
+67                                                   total_receipts_amount <= 2392.7049560546875 & total_receipts_amount > 822.8150024414062 & trip_duration_days <= 4.5 & miles_traveled <= 100.5 & total_receipts_amount <= 2283.885009765625    rule    0.000000  0.020761    0.000000
+68                                                                      total_receipts_amount > 822.8150024414062 & trip_duration_days > 2.5 & miles_traveled > 100.5 & trip_duration_days <= 4.5 & total_receipts_amount <= 1398.1649780273438    rule   -0.000000  0.020761    0.000000
+69                                                                                                                                                                                    trip_duration_days <= 5.5 & total_receipts_amount > 859.0    rule    0.000000  0.245675    0.000000
+70                                                                                                                                  trip_duration_days <= 5.5 & total_receipts_amount > 724.2099914550781 & miles_traveled > 197.36499786376953    rule   46.046119  0.242215   19.727237
+71                                                                                                                                                                                                     total_receipts_amount > 847.739990234375    rule  113.414838  0.626298   54.868514
+72                                                                                                                                                           total_receipts_amount <= 859.0 & trip_duration_days > 4.5 & miles_traveled > 558.0    rule    0.000000  0.107266    0.000000
+73                                                                                         trip_duration_days > 11.5 & miles_traveled > 390.5 & trip_duration_days > 4.5 & miles_traveled <= 835.5 & total_receipts_amount <= 822.8150024414062    rule   46.924320  0.013841    5.482171
+74                                                                       total_receipts_amount > 822.8150024414062 & total_receipts_amount > 1398.1649780273438 & miles_traveled > 100.5 & trip_duration_days <= 4.5 & trip_duration_days > 3.5    rule   58.235612  0.041522   11.617731
+75                                                                                                                           total_receipts_amount > 865.6449890136719 & total_receipts_amount > 1074.3150024414062 & trip_duration_days <= 4.5    rule   -0.000000  0.159170    0.000000
+76                                                                         miles_traveled <= 833.5 & total_receipts_amount <= 865.6449890136719 & miles_traveled > 486.5 & total_receipts_amount > 263.9649963378906 & trip_duration_days > 3.5    rule   10.596657  0.051903    2.350672
+77                                                              trip_duration_days > 7.5 & trip_duration_days <= 10.5 & miles_traveled <= 863.0 & miles_traveled > 781.5 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344    rule    0.000000  0.003460    0.000000
+78                                                                                                                                                                         trip_duration_days > 5.5 & total_receipts_amount > 832.3899841308594    rule   12.322931  0.425606    6.092882
+79                                                                                                  total_receipts_amount > 767.5050048828125 & trip_duration_days > 6.5 & total_receipts_amount > 1023.0499877929688 & miles_traveled <= 504.5    rule   59.684867  0.096886   17.654916
+80                                                                                                                                               miles_traveled > 434.5 & total_receipts_amount <= 724.2099914550781 & trip_duration_days > 4.5    rule    0.000000  0.114187    0.000000
+81                                                                                                trip_duration_days <= 4.5 & total_receipts_amount <= 520.5299987792969 & total_receipts_amount <= 822.8150024414062 & miles_traveled <= 526.5    rule  -33.443763  0.048443    7.180384
+82                                                                                                                                               miles_traveled > 630.5 & total_receipts_amount > 856.2049865722656 & trip_duration_days <= 5.5    rule   -0.000000  0.124567    0.000000
+83                                                                                                  total_receipts_amount > 522.7000122070312 & miles_traveled <= 593.5 & total_receipts_amount <= 931.9200134277344 & trip_duration_days > 4.5    rule    0.000000  0.034602    0.000000
+84                                                                                                   total_receipts_amount <= 856.2049865722656 & trip_duration_days > 3.5 & miles_traveled > 677.0 & total_receipts_amount > 495.4049987792969    rule  154.277125  0.044983   31.976425
+85                                                                                                                                                                                                   total_receipts_amount <= 859.1199951171875    rule   -0.000000  0.384083    0.000000
+86                                                                                                                                                                         total_receipts_amount <= 847.739990234375 & trip_duration_days > 3.5    rule    0.000000  0.273356    0.000000
+87                                                                                                total_receipts_amount > 767.5050048828125 & total_receipts_amount > 1910.385009765625 & trip_duration_days <= 6.5 & trip_duration_days <= 1.5    rule    7.528533  0.013841    0.879559
+88                                                                     total_receipts_amount > 822.8150024414062 & miles_traveled > 100.5 & trip_duration_days <= 4.5 & trip_duration_days <= 2.5 & total_receipts_amount <= 1398.1649780273438    rule   -0.000000  0.024221    0.000000
+89                                                                     trip_duration_days <= 8.5 & trip_duration_days > 4.5 & miles_traveled <= 593.5 & total_receipts_amount <= 522.7000122070312 & total_receipts_amount <= 931.9200134277344    rule -123.462639  0.048443   26.507458
+90                                                                                                                          total_receipts_amount <= 767.5050048828125 & trip_duration_days <= 5.5 & total_receipts_amount <= 96.60000228881836    rule  -48.755518  0.041522    9.726497
+91                                                                                                                                 miles_traveled <= 197.36499786376953 & trip_duration_days <= 5.5 & total_receipts_amount > 724.2099914550781    rule    0.000000  0.038062    0.000000
+92                                                                         miles_traveled > 1020.0 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5 & total_receipts_amount > 691.6699829101562    rule   26.294533  0.003460    1.544059
+93                                                                                                                                             total_receipts_amount <= 865.6449890136719 & trip_duration_days <= 3.5 & miles_traveled <= 787.5    rule   -4.091088  0.089965    1.170592
+94                                                                                                                                             total_receipts_amount <= 856.2049865722656 & trip_duration_days <= 3.5 & miles_traveled <= 256.5    rule  -21.877666  0.038062    4.186219
+95                                                                                                                                                                                   total_receipts_amount <= 859.0 & trip_duration_days <= 4.5    rule  -55.170829  0.141869   19.249942
+96    total_receipts_amount <= 1809.64501953125 & trip_duration_days > 6.0 & total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & total_receipts_amount > 880.7949829101562 & miles_traveled > 934.5 & trip_duration_days > 4.5    rule  193.766094  0.034602   35.414576
+97                                                                                        miles_traveled > 390.5 & trip_duration_days > 4.5 & trip_duration_days <= 11.5 & miles_traveled <= 835.5 & total_receipts_amount <= 822.8150024414062    rule   -0.000000  0.051903    0.000000
+98                                                                                          trip_duration_days > 10.5 & miles_traveled > 100.0 & miles_traveled <= 863.0 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344    rule   16.804141  0.110727    5.273027
+99                                                                                                                                              trip_duration_days <= 3.5 & miles_traveled > 593.5 & total_receipts_amount <= 931.9200134277344    rule   39.653231  0.038062    7.587514
+100                                                                       miles_traveled <= 833.5 & total_receipts_amount <= 865.6449890136719 & total_receipts_amount > 263.9649963378906 & trip_duration_days > 3.5 & miles_traveled <= 486.5    rule  -21.392796  0.110727    6.712917
+101                                                            trip_duration_days > 7.5 & trip_duration_days <= 10.5 & miles_traveled <= 863.0 & trip_duration_days > 5.5 & miles_traveled <= 781.5 & total_receipts_amount > 931.9200134277344    rule   -1.567692  0.072664    0.406949
+102                                                                                                                                             total_receipts_amount <= 856.2049865722656 & trip_duration_days > 3.5 & miles_traveled <= 677.0    rule    0.000000  0.159170    0.000000
+
+==================================================
+Detailed Rule Breakdown:
+==================================================
+
+Rule 0:
+  Type: linear
+  Rule: trip_duration_days
+  Coefficient: 29.323367
+  Support: 1.000000
+  Importance: 115.070028
+------------------------------
+Rule 1:
+  Type: linear
+  Rule: miles_traveled
+  Coefficient: 0.190350
+  Support: 1.000000
+  Importance: 66.540924
+------------------------------
+Rule 2:
+  Type: linear
+  Rule: total_receipts_amount
+  Coefficient: 0.035278
+  Support: 1.000000
+  Importance: 26.136795
+------------------------------
+Rule 3:
+  Type: rule
+  Rule: trip_duration_days > 2.5 & trip_duration_days <= 4.5 & miles_traveled > 526.5 & total_receipts_amount <= 822.8150024414062
+  Coefficient: 32.379004
+  Support: 0.024221
+  Importance: 4.977820
+------------------------------
+Rule 4:
+  Type: rule
+  Rule: trip_duration_days <= 5.5 & total_receipts_amount > 832.3899841308594
+  Coefficient: 0.000000
+  Support: 0.259516
+  Importance: 0.000000
+------------------------------
+Rule 5:
+  Type: rule
+  Rule: total_receipts_amount > 767.5050048828125 & trip_duration_days > 6.5 & total_receipts_amount <= 1023.0499877929688 & miles_traveled <= 504.5
+  Coefficient: -68.816065
+  Support: 0.017301
+  Importance: 8.972969
+------------------------------
+Rule 6:
+  Type: rule
+  Rule: trip_duration_days <= 5.5 & total_receipts_amount > 931.9200134277344 & miles_traveled <= 619.0
+  Coefficient: 58.947750
+  Support: 0.103806
+  Importance: 17.979595
+------------------------------
+Rule 7:
+  Type: rule
+  Rule: total_receipts_amount <= 767.5050048828125 & trip_duration_days > 5.5 & miles_traveled <= 630.0
+  Coefficient: -46.410830
+  Support: 0.114187
+  Importance: 14.760411
+------------------------------
+Rule 8:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & total_receipts_amount <= 848.3200073242188 & trip_duration_days > 4.5 & total_receipts_amount <= 1190.9049682617188 & miles_traveled <= 594.5
+  Coefficient: 0.000000
+  Support: 0.006920
+  Importance: 0.000000
+------------------------------
+Rule 9:
+  Type: rule
+  Rule: trip_duration_days <= 4.5 & miles_traveled > 434.5 & total_receipts_amount <= 724.2099914550781
+  Coefficient: -127.838911
+  Support: 0.038062
+  Importance: 24.461549
+------------------------------
+Rule 10:
+  Type: rule
+  Rule: trip_duration_days <= 10.5 & miles_traveled <= 863.0 & trip_duration_days <= 7.5 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344
+  Coefficient: 118.251299
+  Support: 0.062284
+  Importance: 28.577812
+------------------------------
+Rule 11:
+  Type: rule
+  Rule: miles_traveled <= 593.5 & total_receipts_amount <= 543.0599975585938 & total_receipts_amount <= 931.9200134277344 & trip_duration_days <= 4.5
+  Coefficient: -118.448892
+  Support: 0.055363
+  Importance: 27.087846
+------------------------------
+Rule 12:
+  Type: rule
+  Rule: trip_duration_days > 4.5 & miles_traveled <= 593.5 & trip_duration_days > 8.5 & total_receipts_amount <= 522.7000122070312 & total_receipts_amount <= 931.9200134277344
+  Coefficient: -113.422600
+  Support: 0.048443
+  Importance: 24.351859
+------------------------------
+Rule 13:
+  Type: rule
+  Rule: miles_traveled <= 434.5 & trip_duration_days > 5.5 & total_receipts_amount <= 724.2099914550781
+  Coefficient: -42.723609
+  Support: 0.076125
+  Importance: 11.330186
+------------------------------
+Rule 14:
+  Type: rule
+  Rule: total_receipts_amount > 767.5050048828125 & total_receipts_amount <= 1910.385009765625 & trip_duration_days <= 6.5 & trip_duration_days <= 1.5
+  Coefficient: -17.526636
+  Support: 0.038062
+  Importance: 3.353663
+------------------------------
+Rule 15:
+  Type: rule
+  Rule: miles_traveled <= 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 708.4049987792969 & miles_traveled > 125.72000122070312 & total_receipts_amount <= 822.8150024414062
+  Coefficient: -0.000000
+  Support: 0.058824
+  Importance: 0.000000
+------------------------------
+Rule 16:
+  Type: rule
+  Rule: total_receipts_amount > 865.6449890136719 & miles_traveled <= 849.0 & trip_duration_days > 4.5 & trip_duration_days > 9.5
+  Coefficient: 87.851744
+  Support: 0.124567
+  Importance: 29.011090
+------------------------------
+Rule 17:
+  Type: rule
+  Rule: total_receipts_amount > 2392.7049560546875 & trip_duration_days <= 4.5 & miles_traveled <= 100.5 & total_receipts_amount > 822.8150024414062
+  Coefficient: 0.000000
+  Support: 0.003460
+  Importance: 0.000000
+------------------------------
+Rule 18:
+  Type: rule
+  Rule: miles_traveled <= 795.5 & trip_duration_days > 5.5 & total_receipts_amount > 724.2099914550781 & miles_traveled <= 788.0
+  Coefficient: 82.535285
+  Support: 0.249135
+  Importance: 35.697510
+------------------------------
+Rule 19:
+  Type: rule
+  Rule: total_receipts_amount <= 865.6449890136719 & trip_duration_days > 3.5 & miles_traveled > 833.5
+  Coefficient: 5.942198
+  Support: 0.076125
+  Importance: 1.575855
+------------------------------
+Rule 20:
+  Type: rule
+  Rule: miles_traveled <= 1020.0 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5 & total_receipts_amount > 691.6699829101562
+  Coefficient: -15.215850
+  Support: 0.027682
+  Importance: 2.496299
+------------------------------
+Rule 21:
+  Type: rule
+  Rule: total_receipts_amount <= 767.5050048828125 & trip_duration_days <= 5.5 & total_receipts_amount > 96.60000228881836
+  Coefficient: -22.843249
+  Support: 0.131488
+  Importance: 7.719491
+------------------------------
+Rule 22:
+  Type: rule
+  Rule: total_receipts_amount <= 263.9649963378906 & total_receipts_amount <= 865.6449890136719 & trip_duration_days > 3.5 & miles_traveled <= 833.5
+  Coefficient: -35.656381
+  Support: 0.041522
+  Importance: 7.113280
+------------------------------
+Rule 23:
+  Type: rule
+  Rule: total_receipts_amount <= 865.6449890136719 & trip_duration_days <= 3.5 & miles_traveled > 787.5
+  Coefficient: -0.000000
+  Support: 0.031142
+  Importance: 0.000000
+------------------------------
+Rule 24:
+  Type: rule
+  Rule: total_receipts_amount <= 856.2049865722656 & trip_duration_days <= 3.5 & miles_traveled > 256.5
+  Coefficient: -0.000000
+  Support: 0.083045
+  Importance: 0.000000
+------------------------------
+Rule 25:
+  Type: rule
+  Rule: miles_traveled > 934.5 & total_receipts_amount > 856.2049865722656 & trip_duration_days > 5.5
+  Coefficient: 19.701215
+  Support: 0.089965
+  Importance: 5.637152
+------------------------------
+Rule 26:
+  Type: rule
+  Rule: total_receipts_amount <= 1809.64501953125 & trip_duration_days > 6.0 & total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & miles_traveled > 934.5 & trip_duration_days > 4.5 & total_receipts_amount <= 880.7949829101562
+  Coefficient: 0.000000
+  Support: 0.006920
+  Importance: 0.000000
+------------------------------
+Rule 27:
+  Type: rule
+  Rule: trip_duration_days > 10.5 & miles_traveled <= 863.0 & miles_traveled <= 100.0 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344
+  Coefficient: -0.000000
+  Support: 0.027682
+  Importance: 0.000000
+------------------------------
+Rule 28:
+  Type: rule
+  Rule: total_receipts_amount > 1190.9049682617188 & total_receipts_amount > 822.8150024414062 & trip_duration_days > 11.5 & trip_duration_days > 4.5 & miles_traveled <= 594.5
+  Coefficient: 69.392839
+  Support: 0.044983
+  Importance: 14.382786
+------------------------------
+Rule 29:
+  Type: rule
+  Rule: total_receipts_amount > 865.6449890136719 & miles_traveled > 849.0 & trip_duration_days > 4.5
+  Coefficient: 82.963492
+  Support: 0.145329
+  Importance: 29.238986
+------------------------------
+Rule 30:
+  Type: rule
+  Rule: miles_traveled <= 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 822.8150024414062 & total_receipts_amount > 708.4049987792969
+  Coefficient: -0.000000
+  Support: 0.013841
+  Importance: 0.000000
+------------------------------
+Rule 31:
+  Type: rule
+  Rule: total_receipts_amount <= 1248.635009765625 & trip_duration_days <= 6.5 & trip_duration_days > 1.5 & total_receipts_amount > 767.5050048828125 & miles_traveled <= 614.0
+  Coefficient: -0.389055
+  Support: 0.044983
+  Importance: 0.080638
+------------------------------
+Rule 32:
+  Type: rule
+  Rule: trip_duration_days <= 2.5 & trip_duration_days <= 4.5 & miles_traveled > 526.5 & total_receipts_amount <= 822.8150024414062
+  Coefficient: -0.000000
+  Support: 0.024221
+  Importance: 0.000000
+------------------------------
+Rule 33:
+  Type: rule
+  Rule: total_receipts_amount <= 870.8349914550781
+  Coefficient: -0.820396
+  Support: 0.387543
+  Importance: 0.399688
+------------------------------
+Rule 34:
+  Type: rule
+  Rule: total_receipts_amount > 767.5050048828125 & miles_traveled > 614.0 & trip_duration_days <= 6.5 & trip_duration_days > 1.5
+  Coefficient: 93.021222
+  Support: 0.107266
+  Importance: 28.785574
+------------------------------
+Rule 35:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & miles_traveled > 934.5 & total_receipts_amount > 1809.64501953125 & trip_duration_days > 4.5
+  Coefficient: -0.000000
+  Support: 0.058824
+  Importance: 0.000000
+------------------------------
+Rule 36:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & trip_duration_days > 4.5 & total_receipts_amount <= 1190.9049682617188 & total_receipts_amount > 848.3200073242188 & miles_traveled <= 594.5
+  Coefficient: -31.723975
+  Support: 0.038062
+  Importance: 6.070277
+------------------------------
+Rule 37:
+  Type: rule
+  Rule: miles_traveled > 594.5 & miles_traveled <= 934.5 & trip_duration_days > 4.5 & total_receipts_amount > 822.8150024414062
+  Coefficient: 48.643438
+  Support: 0.159170
+  Importance: 17.795429
+------------------------------
+Rule 38:
+  Type: rule
+  Rule: total_receipts_amount <= 832.3899841308594
+  Coefficient: -19.043533
+  Support: 0.314879
+  Importance: 8.845104
+------------------------------
+Rule 39:
+  Type: rule
+  Rule: total_receipts_amount <= 767.5050048828125 & trip_duration_days > 5.5 & miles_traveled > 630.0
+  Coefficient: 24.247394
+  Support: 0.103806
+  Importance: 7.395674
+------------------------------
+Rule 40:
+  Type: rule
+  Rule: total_receipts_amount <= 691.6699829101562 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5 & miles_traveled <= 1101.0
+  Coefficient: -58.948661
+  Support: 0.107266
+  Importance: 18.241763
+------------------------------
+Rule 41:
+  Type: rule
+  Rule: trip_duration_days <= 5.5 & total_receipts_amount > 931.9200134277344 & miles_traveled > 619.0
+  Coefficient: 130.853353
+  Support: 0.076125
+  Importance: 34.701958
+------------------------------
+Rule 42:
+  Type: rule
+  Rule: trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344 & miles_traveled > 863.0
+  Coefficient: 1.516060
+  Support: 0.128028
+  Importance: 0.506547
+------------------------------
+Rule 43:
+  Type: rule
+  Rule: total_receipts_amount <= 2392.7049560546875 & total_receipts_amount > 822.8150024414062 & trip_duration_days <= 4.5 & total_receipts_amount > 2283.885009765625 & miles_traveled <= 100.5
+  Coefficient: -619.828530
+  Support: 0.003460
+  Importance: 36.397367
+------------------------------
+Rule 44:
+  Type: rule
+  Rule: total_receipts_amount > 767.5050048828125 & trip_duration_days > 6.5 & miles_traveled > 504.5
+  Coefficient: 79.460970
+  Support: 0.235294
+  Importance: 33.705953
+------------------------------
+Rule 45:
+  Type: rule
+  Rule: trip_duration_days > 5.5 & total_receipts_amount > 859.0
+  Coefficient: 0.000000
+  Support: 0.401384
+  Importance: 0.000000
+------------------------------
+Rule 46:
+  Type: rule
+  Rule: miles_traveled <= 795.5 & miles_traveled > 788.0 & trip_duration_days > 5.5 & total_receipts_amount > 724.2099914550781
+  Coefficient: -66.581378
+  Support: 0.003460
+  Importance: 3.909770
+------------------------------
+Rule 47:
+  Type: rule
+  Rule: miles_traveled <= 434.5 & trip_duration_days <= 5.5 & total_receipts_amount <= 724.2099914550781
+  Coefficient: -134.097359
+  Support: 0.072664
+  Importance: 34.809631
+------------------------------
+Rule 48:
+  Type: rule
+  Rule: total_receipts_amount <= 859.0 & trip_duration_days > 4.5 & miles_traveled <= 558.0
+  Coefficient: -0.000000
+  Support: 0.103806
+  Importance: 0.000000
+------------------------------
+Rule 49:
+  Type: rule
+  Rule: miles_traveled <= 593.5 & total_receipts_amount <= 931.9200134277344 & trip_duration_days <= 4.5 & total_receipts_amount > 543.0599975585938
+  Coefficient: -0.000000
+  Support: 0.027682
+  Importance: 0.000000
+------------------------------
+Rule 50:
+  Type: rule
+  Rule: total_receipts_amount > 865.6449890136719 & total_receipts_amount <= 1074.3150024414062 & trip_duration_days <= 4.5
+  Coefficient: -153.505017
+  Support: 0.027682
+  Importance: 25.183894
+------------------------------
+Rule 51:
+  Type: rule
+  Rule: total_receipts_amount > 865.6449890136719 & miles_traveled <= 849.0 & trip_duration_days > 4.5 & trip_duration_days <= 9.5
+  Coefficient: 42.916229
+  Support: 0.141869
+  Importance: 14.974126
+------------------------------
+Rule 52:
+  Type: rule
+  Rule: total_receipts_amount <= 1809.64501953125 & total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & miles_traveled > 934.5 & trip_duration_days > 4.5 & trip_duration_days <= 6.0
+  Coefficient: 0.000000
+  Support: 0.003460
+  Importance: 0.000000
+------------------------------
+Rule 53:
+  Type: rule
+  Rule: miles_traveled <= 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 708.4049987792969 & miles_traveled <= 125.72000122070312 & total_receipts_amount <= 822.8150024414062
+  Coefficient: -84.640868
+  Support: 0.027682
+  Importance: 13.886104
+------------------------------
+Rule 54:
+  Type: rule
+  Rule: miles_traveled > 835.5 & miles_traveled > 390.5 & trip_duration_days > 4.5 & total_receipts_amount <= 822.8150024414062
+  Coefficient: 56.457505
+  Support: 0.048443
+  Importance: 12.121440
+------------------------------
+Rule 55:
+  Type: rule
+  Rule: miles_traveled > 795.5 & trip_duration_days > 5.5 & total_receipts_amount > 724.2099914550781
+  Coefficient: 162.835731
+  Support: 0.166090
+  Importance: 60.601170
+------------------------------
+Rule 56:
+  Type: rule
+  Rule: total_receipts_amount > 520.5299987792969 & trip_duration_days <= 4.5 & total_receipts_amount <= 822.8150024414062 & miles_traveled <= 526.5
+  Coefficient: -0.000000
+  Support: 0.017301
+  Importance: 0.000000
+------------------------------
+Rule 57:
+  Type: rule
+  Rule: total_receipts_amount <= 691.6699829101562 & miles_traveled > 1101.0 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5
+  Coefficient: 0.000000
+  Support: 0.024221
+  Importance: 0.000000
+------------------------------
+Rule 58:
+  Type: rule
+  Rule: miles_traveled <= 630.5 & total_receipts_amount > 856.2049865722656 & trip_duration_days <= 5.5
+  Coefficient: 5.840076
+  Support: 0.128028
+  Importance: 1.951290
+------------------------------
+Rule 59:
+  Type: rule
+  Rule: total_receipts_amount > 856.2049865722656 & trip_duration_days > 5.5 & miles_traveled <= 934.5
+  Coefficient: -0.000000
+  Support: 0.276817
+  Importance: 0.000000
+------------------------------
+Rule 60:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & total_receipts_amount > 1398.1649780273438 & trip_duration_days <= 3.5 & miles_traveled > 100.5 & trip_duration_days <= 4.5
+  Coefficient: -0.000000
+  Support: 0.086505
+  Importance: 0.000000
+------------------------------
+Rule 61:
+  Type: rule
+  Rule: total_receipts_amount > 859.1199951171875
+  Coefficient: 0.000000
+  Support: 0.615917
+  Importance: 0.000000
+------------------------------
+Rule 62:
+  Type: rule
+  Rule: total_receipts_amount <= 856.2049865722656 & trip_duration_days > 3.5 & miles_traveled > 677.0 & total_receipts_amount <= 495.4049987792969
+  Coefficient: -40.829303
+  Support: 0.055363
+  Importance: 9.337174
+------------------------------
+Rule 63:
+  Type: rule
+  Rule: total_receipts_amount > 1190.9049682617188 & total_receipts_amount > 822.8150024414062 & trip_duration_days > 4.5 & trip_duration_days <= 11.5 & miles_traveled <= 594.5
+  Coefficient: 0.000000
+  Support: 0.117647
+  Importance: 0.000000
+------------------------------
+Rule 64:
+  Type: rule
+  Rule: trip_duration_days <= 6.5 & total_receipts_amount > 1248.635009765625 & trip_duration_days > 1.5 & total_receipts_amount > 767.5050048828125 & miles_traveled <= 614.0
+  Coefficient: 125.519406
+  Support: 0.055363
+  Importance: 28.704788
+------------------------------
+Rule 65:
+  Type: rule
+  Rule: total_receipts_amount > 870.8349914550781
+  Coefficient: 49.414970
+  Support: 0.612457
+  Importance: 24.074448
+------------------------------
+Rule 66:
+  Type: rule
+  Rule: total_receipts_amount <= 847.739990234375 & trip_duration_days <= 3.5
+  Coefficient: -119.525681
+  Support: 0.100346
+  Importance: 35.912783
+------------------------------
+Rule 67:
+  Type: rule
+  Rule: total_receipts_amount <= 2392.7049560546875 & total_receipts_amount > 822.8150024414062 & trip_duration_days <= 4.5 & miles_traveled <= 100.5 & total_receipts_amount <= 2283.885009765625
+  Coefficient: 0.000000
+  Support: 0.020761
+  Importance: 0.000000
+------------------------------
+Rule 68:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & trip_duration_days > 2.5 & miles_traveled > 100.5 & trip_duration_days <= 4.5 & total_receipts_amount <= 1398.1649780273438
+  Coefficient: -0.000000
+  Support: 0.020761
+  Importance: 0.000000
+------------------------------
+Rule 69:
+  Type: rule
+  Rule: trip_duration_days <= 5.5 & total_receipts_amount > 859.0
+  Coefficient: 0.000000
+  Support: 0.245675
+  Importance: 0.000000
+------------------------------
+Rule 70:
+  Type: rule
+  Rule: trip_duration_days <= 5.5 & total_receipts_amount > 724.2099914550781 & miles_traveled > 197.36499786376953
+  Coefficient: 46.046119
+  Support: 0.242215
+  Importance: 19.727237
+------------------------------
+Rule 71:
+  Type: rule
+  Rule: total_receipts_amount > 847.739990234375
+  Coefficient: 113.414838
+  Support: 0.626298
+  Importance: 54.868514
+------------------------------
+Rule 72:
+  Type: rule
+  Rule: total_receipts_amount <= 859.0 & trip_duration_days > 4.5 & miles_traveled > 558.0
+  Coefficient: 0.000000
+  Support: 0.107266
+  Importance: 0.000000
+------------------------------
+Rule 73:
+  Type: rule
+  Rule: trip_duration_days > 11.5 & miles_traveled > 390.5 & trip_duration_days > 4.5 & miles_traveled <= 835.5 & total_receipts_amount <= 822.8150024414062
+  Coefficient: 46.924320
+  Support: 0.013841
+  Importance: 5.482171
+------------------------------
+Rule 74:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & total_receipts_amount > 1398.1649780273438 & miles_traveled > 100.5 & trip_duration_days <= 4.5 & trip_duration_days > 3.5
+  Coefficient: 58.235612
+  Support: 0.041522
+  Importance: 11.617731
+------------------------------
+Rule 75:
+  Type: rule
+  Rule: total_receipts_amount > 865.6449890136719 & total_receipts_amount > 1074.3150024414062 & trip_duration_days <= 4.5
+  Coefficient: -0.000000
+  Support: 0.159170
+  Importance: 0.000000
+------------------------------
+Rule 76:
+  Type: rule
+  Rule: miles_traveled <= 833.5 & total_receipts_amount <= 865.6449890136719 & miles_traveled > 486.5 & total_receipts_amount > 263.9649963378906 & trip_duration_days > 3.5
+  Coefficient: 10.596657
+  Support: 0.051903
+  Importance: 2.350672
+------------------------------
+Rule 77:
+  Type: rule
+  Rule: trip_duration_days > 7.5 & trip_duration_days <= 10.5 & miles_traveled <= 863.0 & miles_traveled > 781.5 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344
+  Coefficient: 0.000000
+  Support: 0.003460
+  Importance: 0.000000
+------------------------------
+Rule 78:
+  Type: rule
+  Rule: trip_duration_days > 5.5 & total_receipts_amount > 832.3899841308594
+  Coefficient: 12.322931
+  Support: 0.425606
+  Importance: 6.092882
+------------------------------
+Rule 79:
+  Type: rule
+  Rule: total_receipts_amount > 767.5050048828125 & trip_duration_days > 6.5 & total_receipts_amount > 1023.0499877929688 & miles_traveled <= 504.5
+  Coefficient: 59.684867
+  Support: 0.096886
+  Importance: 17.654916
+------------------------------
+Rule 80:
+  Type: rule
+  Rule: miles_traveled > 434.5 & total_receipts_amount <= 724.2099914550781 & trip_duration_days > 4.5
+  Coefficient: 0.000000
+  Support: 0.114187
+  Importance: 0.000000
+------------------------------
+Rule 81:
+  Type: rule
+  Rule: trip_duration_days <= 4.5 & total_receipts_amount <= 520.5299987792969 & total_receipts_amount <= 822.8150024414062 & miles_traveled <= 526.5
+  Coefficient: -33.443763
+  Support: 0.048443
+  Importance: 7.180384
+------------------------------
+Rule 82:
+  Type: rule
+  Rule: miles_traveled > 630.5 & total_receipts_amount > 856.2049865722656 & trip_duration_days <= 5.5
+  Coefficient: -0.000000
+  Support: 0.124567
+  Importance: 0.000000
+------------------------------
+Rule 83:
+  Type: rule
+  Rule: total_receipts_amount > 522.7000122070312 & miles_traveled <= 593.5 & total_receipts_amount <= 931.9200134277344 & trip_duration_days > 4.5
+  Coefficient: 0.000000
+  Support: 0.034602
+  Importance: 0.000000
+------------------------------
+Rule 84:
+  Type: rule
+  Rule: total_receipts_amount <= 856.2049865722656 & trip_duration_days > 3.5 & miles_traveled > 677.0 & total_receipts_amount > 495.4049987792969
+  Coefficient: 154.277125
+  Support: 0.044983
+  Importance: 31.976425
+------------------------------
+Rule 85:
+  Type: rule
+  Rule: total_receipts_amount <= 859.1199951171875
+  Coefficient: -0.000000
+  Support: 0.384083
+  Importance: 0.000000
+------------------------------
+Rule 86:
+  Type: rule
+  Rule: total_receipts_amount <= 847.739990234375 & trip_duration_days > 3.5
+  Coefficient: 0.000000
+  Support: 0.273356
+  Importance: 0.000000
+------------------------------
+Rule 87:
+  Type: rule
+  Rule: total_receipts_amount > 767.5050048828125 & total_receipts_amount > 1910.385009765625 & trip_duration_days <= 6.5 & trip_duration_days <= 1.5
+  Coefficient: 7.528533
+  Support: 0.013841
+  Importance: 0.879559
+------------------------------
+Rule 88:
+  Type: rule
+  Rule: total_receipts_amount > 822.8150024414062 & miles_traveled > 100.5 & trip_duration_days <= 4.5 & trip_duration_days <= 2.5 & total_receipts_amount <= 1398.1649780273438
+  Coefficient: -0.000000
+  Support: 0.024221
+  Importance: 0.000000
+------------------------------
+Rule 89:
+  Type: rule
+  Rule: trip_duration_days <= 8.5 & trip_duration_days > 4.5 & miles_traveled <= 593.5 & total_receipts_amount <= 522.7000122070312 & total_receipts_amount <= 931.9200134277344
+  Coefficient: -123.462639
+  Support: 0.048443
+  Importance: 26.507458
+------------------------------
+Rule 90:
+  Type: rule
+  Rule: total_receipts_amount <= 767.5050048828125 & trip_duration_days <= 5.5 & total_receipts_amount <= 96.60000228881836
+  Coefficient: -48.755518
+  Support: 0.041522
+  Importance: 9.726497
+------------------------------
+Rule 91:
+  Type: rule
+  Rule: miles_traveled <= 197.36499786376953 & trip_duration_days <= 5.5 & total_receipts_amount > 724.2099914550781
+  Coefficient: 0.000000
+  Support: 0.038062
+  Importance: 0.000000
+------------------------------
+Rule 92:
+  Type: rule
+  Rule: miles_traveled > 1020.0 & total_receipts_amount <= 931.9200134277344 & miles_traveled > 593.5 & trip_duration_days > 3.5 & total_receipts_amount > 691.6699829101562
+  Coefficient: 26.294533
+  Support: 0.003460
+  Importance: 1.544059
+------------------------------
+Rule 93:
+  Type: rule
+  Rule: total_receipts_amount <= 865.6449890136719 & trip_duration_days <= 3.5 & miles_traveled <= 787.5
+  Coefficient: -4.091088
+  Support: 0.089965
+  Importance: 1.170592
+------------------------------
+Rule 94:
+  Type: rule
+  Rule: total_receipts_amount <= 856.2049865722656 & trip_duration_days <= 3.5 & miles_traveled <= 256.5
+  Coefficient: -21.877666
+  Support: 0.038062
+  Importance: 4.186219
+------------------------------
+Rule 95:
+  Type: rule
+  Rule: total_receipts_amount <= 859.0 & trip_duration_days <= 4.5
+  Coefficient: -55.170829
+  Support: 0.141869
+  Importance: 19.249942
+------------------------------
+Rule 96:
+  Type: rule
+  Rule: total_receipts_amount <= 1809.64501953125 & trip_duration_days > 6.0 & total_receipts_amount > 822.8150024414062 & miles_traveled > 594.5 & total_receipts_amount > 880.7949829101562 & miles_traveled > 934.5 & trip_duration_days > 4.5
+  Coefficient: 193.766094
+  Support: 0.034602
+  Importance: 35.414576
+------------------------------
+Rule 97:
+  Type: rule
+  Rule: miles_traveled > 390.5 & trip_duration_days > 4.5 & trip_duration_days <= 11.5 & miles_traveled <= 835.5 & total_receipts_amount <= 822.8150024414062
+  Coefficient: -0.000000
+  Support: 0.051903
+  Importance: 0.000000
+------------------------------
+Rule 98:
+  Type: rule
+  Rule: trip_duration_days > 10.5 & miles_traveled > 100.0 & miles_traveled <= 863.0 & trip_duration_days > 5.5 & total_receipts_amount > 931.9200134277344
+  Coefficient: 16.804141
+  Support: 0.110727
+  Importance: 5.273027
+------------------------------
+Rule 99:
+  Type: rule
+  Rule: trip_duration_days <= 3.5 & miles_traveled > 593.5 & total_receipts_amount <= 931.9200134277344
+  Coefficient: 39.653231
+  Support: 0.038062
+  Importance: 7.587514
+------------------------------
+Rule 100:
+  Type: rule
+  Rule: miles_traveled <= 833.5 & total_receipts_amount <= 865.6449890136719 & total_receipts_amount > 263.9649963378906 & trip_duration_days > 3.5 & miles_traveled <= 486.5
+  Coefficient: -21.392796
+  Support: 0.110727
+  Importance: 6.712917
+------------------------------
+Rule 101:
+  Type: rule
+  Rule: trip_duration_days > 7.5 & trip_duration_days <= 10.5 & miles_traveled <= 863.0 & trip_duration_days > 5.5 & miles_traveled <= 781.5 & total_receipts_amount > 931.9200134277344
+  Coefficient: -1.567692
+  Support: 0.072664
+  Importance: 0.406949
+------------------------------
+Rule 102:
+  Type: rule
+  Rule: total_receipts_amount <= 856.2049865722656 & trip_duration_days > 3.5 & miles_traveled <= 677.0
+  Coefficient: 0.000000
+  Support: 0.159170
+  Importance: 0.000000
+------------------------------
