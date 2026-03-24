@@ -151,6 +151,8 @@ def calculate_reimbursement(days, miles, receipts):
     if dists[0][0] < 1e-10:
         return round(dists[0][1], 2)
 
+    nearest_dist = dists[0][0]
+
     # KNN prediction with local weighted average
     K = 15
     total_w = 0.0
@@ -181,7 +183,6 @@ def calculate_reimbursement(days, miles, receipts):
 
     # Blend: use KNN weight based on how close the nearest neighbor is
     # If nearest neighbor is very close, trust KNN. If far, blend with regression.
-    nearest_dist = dists[0][0]
     # Sigmoid blending: KNN weight goes from ~1 (near) to ~0 (far)
     # threshold: at distance 0.05 (normalized), KNN weight ≈ 0.5
     knn_weight = 1.0 / (1.0 + math.exp((nearest_dist - 0.05) * 60))
