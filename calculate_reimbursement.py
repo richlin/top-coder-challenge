@@ -151,8 +151,7 @@ def calculate_reimbursement(days, miles, receipts):
     if dists[0][0] < 1e-10:
         return round(dists[0][1], 2)
 
-    # KNN prediction (K=15, inverse distance^2 weighting)
-    # K=15 gives better generalization than K=10 while still getting exact training matches
+    # KNN prediction with local weighted average
     K = 15
     total_w = 0.0
     total_v = 0.0
@@ -161,6 +160,21 @@ def calculate_reimbursement(days, miles, receipts):
         total_w += w
         total_v += w * val
     knn_pred = total_v / total_w
+
+    # Also compute a larger-neighborhood average for stability
+    K2 = 30
+    total_w2 = 0.0
+    total_v2 = 0.0
+    for dist, val in dists[:K2]:
+        w = 1.0 / (dist ** 2 + 1e-8)
+        total_w2 += w
+        total_v2 += w * val
+    knn_pred_wide = total_v2 / total_w2
+
+    # Blend narrow and wide: narrow for close points, wide for far
+    # This stabilizes predictions for unseen inputs
+    blend_factor = min(1.0, nearest_dist * 20)  # 0 at dist=0, 1 at dist>=0.05
+    knn_pred = (1 - blend_factor) * knn_pred + blend_factor * knn_pred_wide
 
     # Regression prediction
     reg_pred = _regression_predict(days, miles, receipts)
