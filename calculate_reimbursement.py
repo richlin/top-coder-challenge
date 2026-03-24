@@ -34,10 +34,15 @@ MILE_SCALE = 1400.0
 RCPT_SCALE = 2600.0
 
 def _distance(d1, m1, r1, d2, m2, r2):
-    dd = (d1 - d2) / DAY_SCALE
+    """Weighted distance: days matter more since it's discrete and most structured."""
+    dd = (d1 - d2) / DAY_SCALE * 2.0  # days weighted 2x
     dm = (m1 - m2) / MILE_SCALE
     dr = (r1 - r2) / RCPT_SCALE
-    return math.sqrt(dd*dd + dm*dm + dr*dr)
+    # Penalize cross-.49/.99 boundary: if one is special and other isn't, add distance
+    sp_penalty = 0.0
+    if is_special_cents(r1) != is_special_cents(r2):
+        sp_penalty = 0.3  # significant penalty for crossing the bug boundary
+    return math.sqrt(dd*dd + dm*dm + dr*dr) + sp_penalty
 
 def is_special_cents(receipts):
     cents = round(receipts * 100) % 100
