@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 if 'calculate_reimbursement_rules' in sys.modules:
     del sys.modules['calculate_reimbursement_rules']
 
-from calculate_reimbursement_rules import calculate_reimbursement
+from simple_rules_model import calculate_reimbursement
 
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public_cases.json')) as f:
     cases = json.load(f)
