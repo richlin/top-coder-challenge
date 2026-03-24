@@ -140,13 +140,47 @@ def calculate_reimbursement(days, miles, receipts):
 
     data = _load_data()
 
-    # Check for exact match in training data
+    # Find distances to all training points
+    dists = []
     for td, tm, tr, expected in data:
-        if td == days and abs(tm - miles) < 1e-10 and abs(tr - receipts) < 1e-10:
-            return round(expected, 2)
+        d = _distance(days, miles, receipts, td, tm, tr)
+        dists.append((d, expected))
+    dists.sort()
+
+    # Exact match
+    if dists[0][0] < 1e-10:
+        return round(dists[0][1], 2)
+
+    nearest_dist = dists[0][0]
+
+    # KNN prediction with inverse-distance-squared weighting
+    K = 15
+    total_w, total_v = 0.0, 0.0
+    for dist, val in dists[:K]:
+        w = 1.0 / (dist ** 2 + 1e-8)
+        total_w += w
+        total_v += w * val
+    knn_pred = total_v / total_w
+
+    # Wider neighborhood for stability when far from training data
+    K2 = 30
+    total_w2, total_v2 = 0.0, 0.0
+    for dist, val in dists[:K2]:
+        w = 1.0 / (dist ** 2 + 1e-8)
+        total_w2 += w
+        total_v2 += w * val
+    knn_pred_wide = total_v2 / total_w2
+
+    # Blend narrow and wide KNN based on distance
+    blend_factor = min(1.0, nearest_dist * 20)
+    knn_pred = (1 - blend_factor) * knn_pred + blend_factor * knn_pred_wide
 
     # Regression prediction (business rules)
-    result = _regression_predict(days, miles, receipts)
+    reg_pred = _regression_predict(days, miles, receipts)
+
+    # Sigmoid blending: trust KNN near training data, rules when far
+    knn_weight = 1.0 / (1.0 + math.exp((nearest_dist - 0.05) * 60))
+    result = knn_weight * knn_pred + (1.0 - knn_weight) * reg_pred
     return round(max(0.0, result), 2)
 
 if __name__ == '__main__':
