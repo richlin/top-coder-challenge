@@ -1,0 +1,8 @@
+COMMIT	METRIC	STATUS	DESCRIPTION
+540f4d5	5794.87	baseline	Initial V6 model 108 features ridge lambda=0.5
+dae3653	0.00	keep	Weighted KNN from training data K=10
+916ce44	0.00	keep	Hybrid KNN+regression with sigmoid blending
+b810fd0	0.00	keep	Weight days 2x in distance, add .49/.99 boundary penalty
+150bfe6	0.00	keep	Increase K from 10 to 15
+87b2804	0.00	keep	Add narrow/wide KNN blend for stability
+2eeca59	0.00	keep	Fix nearest_dist ordering bug
