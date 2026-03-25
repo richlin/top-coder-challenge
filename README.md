@@ -58,6 +58,59 @@ Score: 0
 
 ---
 
+## Key Discoveries
+
+Through analytical decomposition, twin analysis, and employee interviews, we reverse-engineered five core components of the legacy system. For comprehensive details, see **[FINDINGS.md](FINDINGS.md)**.
+
+### Per-Diem: The "5-Day Sweet Spot" and Day-8 Penalty
+
+The system uses a 14-value lookup table with diminishing returns. Per-day rate peaks at 5 days ($94/day), then declines — with a sharp, unexplained **drop at day 8** from $89/day to $69/day. Employees who extend a 7-day trip to 8 days actually lose $69 in total reimbursement.
+
+### Mileage: Non-Monotonic 4-Tier Piecewise
+
+| Mile Range | Rate per Mile |
+|---|---|
+| 0–100 | $0.83 |
+| 100–300 | $0.41 (dip) |
+| 300–800 | $0.59 (recovery) |
+| 800+ | $0.35 |
+
+The counter-intuitive dip at 100–300 miles followed by recovery at 300–800 discourages short local trips while rewarding longer business travel.
+
+### Receipts: The 117% "Sweet Spot" Bug
+
+A 5-tier receipt system where the $600–$1,200 range reimburses at **117%** — employees get back more than they spent. Almost certainly a bug from overlapping tier calculations in the legacy code. Below $300, receipts effectively don't help. Above $1,200, diminishing returns.
+
+### Interaction Penalties
+
+The system is not purely additive. Three hidden cross-terms modify reimbursements:
+
+| Interaction | Effect | Name |
+|---|---|---|
+| Days × Miles / 1000 | +$7.40 | "Road warrior reward" |
+| Days × Receipts / 1000 | **-$11.60** | "Vacation penalty" |
+| Miles × Receipts / 100k | -$13.40 | "Something doesn't add up" |
+
+The **days × receipts penalty** is the single most impactful hidden rule — identical daily spending produces dramatically different outcomes depending on trip length.
+
+### The .49/.99 Floating-Point Bug
+
+When receipt totals end in exactly .49 or .99 cents, a floating-point rounding error from the pre-IEEE 754 era triggers a **quadratic penalty**. Affects 3% of cases. Below ~$210, it's actually a small bonus. Above $500, it can wipe out up to **89% of reimbursement** — hundreds of dollars lost because of a cents value.
+
+### Employee Interview Validation
+
+| Claim | Verified? |
+|---|---|
+| "5-6 day trips are the sweet spot" (Jennifer, Kevin) | **Yes** |
+| "The system rewards hustle / high miles per day" (Marcus) | **Yes** |
+| "High spending on long trips gets penalized" (Kevin) | **Yes** |
+| "Receipts ending in .49/.99 give extra money" (Lisa) | **Partially** — only for small amounts |
+| "Small receipts get penalized vs. no receipts" (Dave) | **Yes** |
+| "Tuesday submissions beat Friday" (Kevin) | **No** — no temporal data in the system |
+| "Lunar cycles affect reimbursement" (Kevin) | **No** |
+
+---
+
 ## Solution: Per-Day Ridge Feature Model
 
 The active model (`approach3_ridge_features.py`) uses **520 hand-crafted features** with **per-day Ridge regression coefficients** — separate models for each day count (1–14). No KNN, no data loading at runtime — pure math with hardcoded coefficients.
@@ -80,16 +133,6 @@ The active model (`approach3_ridge_features.py`) uses **520 hand-crafted feature
 
 Approach 3 is active (`run.sh` calls it). See `approach3_generalized.py` for a 108-feature model optimized for generalization (CV MAE ~$77).
 
-### Key Discoveries
-
-See [FINDINGS.md](FINDINGS.md) for comprehensive business rules. Highlights:
-
-- **Per-diem**: Lookup table with diminishing returns ($80/day for 1 day → $63/day for 14 days), with a notable drop at day 8
-- **Mileage**: Non-monotonic 4-tier piecewise ($0.83, $0.41, $0.59, $0.35/mile at breakpoints 100/300/800)
-- **Receipts**: 5-tier piecewise with a 117% "sweet spot" at $600–$1,200 (likely a bug in overlapping tier calculations)
-- **Interactions**: Days×miles bonus, days×receipts penalty (strongest), miles×receipts penalty
-- **The .49/.99 bug**: Receipt amounts ending in .49 or .99 cents trigger a quadratic penalty that can wipe out 89% of reimbursement
-
 ### Score Progression
 
 | Iteration | What Changed | MAE | Score |
@@ -103,25 +146,58 @@ See [FINDINGS.md](FINDINGS.md) for comprehensive business rules. Highlights:
 
 ---
 
+## Recommendation: Replace the System
+
+Based on our findings, we recommend ACME replace the legacy system entirely. See **[RECOMMENDATION.md](RECOMMENDATION.md)** for the full consulting recommendation. Key points:
+
+### Why Replace
+
+- **A bug is determining compensation.** The .49/.99 floating-point error can cost employees hundreds of dollars per trip — with no audit trail or justification.
+- **The 117% receipt sweet spot is not policy** — it's an artifact of overlapping tier calculations that no one authorized.
+- **Employees have lost trust.** One employee built a 3-year spreadsheet operation testing lunar cycles. Another deliberately manipulates receipt totals. A third has given up entirely.
+- **The system is unchangeable.** No source code access means ACME cannot fix bugs, adjust rates, or respond to policy changes.
+
+### Three Proposed Replacement Models
+
+| Model | Philosophy | Complexity | Transparency |
+|---|---|---|---|
+| **A: "Clean Legacy"** | Same rates, bugs removed | 29 params | Low — interaction terms still opaque |
+| **B: "Simple & Transparent"** | $85/day + $0.55/mile + 75% receipts | 3 params | Perfect — anyone can compute it |
+| **C: "Policy-Driven" (Rec.)** | Explicit tiers + efficiency bonus | ~12 params | High — all rules in plain English |
+
+**We recommend Model C** as the starting point for stakeholder design workshops — transparent enough that employees can predict their reimbursements, nuanced enough to reward efficient travel.
+
+### Implementation Roadmap
+
+| Phase | Timeline | Deliverable |
+|---|---|---|
+| Validate replica | Weeks 1–2 | Shadow system confirmation on live data |
+| Design new rules | Weeks 3–6 | Stakeholder-approved business rules |
+| Build & test | Weeks 7–12 | New engine with full test coverage |
+| Cutover | Weeks 13–14 | Production deployment + employee communication |
+
+---
+
 ## File Structure
 
 ```
-approach3_ridge_features.py         # Active model — 520-feature per-day Ridge (score=0)
-approach3_generalized.py   # Generalized model — 108 features, best CV MAE
-approach1_knn_ridge.py    # Approach 1 — KNN + Ridge hybrid (score=0)
-run.sh                        # Entry point (calls approach3_ridge_features.py)
-eval_fast.py                  # Fast Python-based evaluation
-FINDINGS.md                   # Complete business rules documentation
-public_cases.json             # 1,000 labeled training examples (provided)
-private_cases.json            # 5,000 unlabeled test cases (provided)
-analysis/                     # Analysis and fitting scripts
-  fit_ridge_v3.py             # Per-day Ridge fitting with extended features
-  generalization_study.py     # Feature count vs generalization tradeoff
-  decompose.py                # Component decomposition
-  extract_rules.py            # Rule extraction
+approach3_ridge_features.py    # Active model — 520-feature per-day Ridge (score=0)
+approach3_generalized.py       # Generalized model — 108 features, best CV MAE
+approach1_knn_ridge.py         # Approach 1 — KNN + Ridge hybrid (score=0)
+run.sh                         # Entry point (calls approach3_ridge_features.py)
+eval_fast.py                   # Fast Python-based evaluation
+FINDINGS.md                    # Complete reverse-engineered business rules
+RECOMMENDATION.md              # Consulting recommendation for system replacement
+public_cases.json              # 1,000 labeled training examples (provided)
+private_cases.json             # 5,000 unlabeled test cases (provided)
+analysis/                      # Analysis and fitting scripts
+  fit_ridge_v3.py              # Per-day Ridge fitting with extended features
+  generalization_study.py      # Feature count vs generalization tradeoff
+  decompose.py                 # Component decomposition
+  extract_rules.py             # Rule extraction
   ...
 tests/
-  test_simple_rules.py        # Regression tests
+  test_simple_rules.py         # Regression tests
 ```
 
 ## Running
