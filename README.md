@@ -1,8 +1,7 @@
 # Top Coder Challenge: Black Box Legacy Reimbursement System
 
-> Original challenge: [8090-inc/top-coder-challenge](https://github.com/8090-inc/top-coder-challenge)
-
 **Reverse-engineer a 60-year-old travel reimbursement system using only historical data and employee interviews.**
+> Original link: [8090-inc/top-coder-challenge](https://github.com/8090-inc/top-coder-challenge)
 
 ---
 
@@ -19,6 +18,21 @@ The system takes three inputs from an employee's travel expense report and retur
 | `total_receipts_amount` | Total dollar amount of submitted receipts | $1.42–$2,503.46 |
 
 **Output:** A single reimbursement amount (e.g., `$847.25`)
+
+### The Problem
+
+Stakeholders have observed frequent anomalies: unpredictable reimbursement amounts, inconsistent treatment of receipts, and odd behaviors tied to specific trip lengths or distances. Different departments hold conflicting folklore about how the system works. 8090 built a replacement system, but ACME is confused by the differences in results.
+
+### The Mission
+
+Figure out the original business logic — **including any bugs** — so we can explain why the new system is different and better. Create a perfect replica of the legacy system by reverse-engineering its behavior.
+
+### What's Given
+
+- **1,000 historical input/output examples** (`public_cases.json`) — labeled training data with known expected outputs
+- **5,000 private test cases** (`private_cases.json`) — inputs only, no expected outputs (used for final scoring)
+- **Employee interviews** (`INTERVIEWS.md`) — anecdotal, inconsistent, and occasionally contradictory memories from employees who use the system
+- **A PRD** (`PRD.md`) — product requirements describing the business context
 
 ### Scoring
 
