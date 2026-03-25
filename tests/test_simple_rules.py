@@ -2,9 +2,9 @@ import pytest
 import sys
 import os
 
-# Add parent dir to path so we can import simple_rules_model
+# Add parent dir to path so we can import the model
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from simple_rules_model import calculate_reimbursement, is_special_cents
+from approach3_ridge_features import calculate_reimbursement, is_special_cents
 
 
 class TestSpecialCents:

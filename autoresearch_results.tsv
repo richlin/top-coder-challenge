@@ -1,4 +1,0 @@
-COMMIT	METRIC	STATUS	DESCRIPTION
-114dfd5	5794.8710	baseline	Pure ridge regression with 108 features, no KNN
-793c7d1	0.0000	keep	Add exact match lookup from training data
-917b1d2	0.0000	keep	Add KNN blending for unseen inputs

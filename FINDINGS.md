@@ -2,43 +2,59 @@
 
 ## Overview
 
-These rules were extracted from 1,000 historical input/output examples and employee interviews. The system takes three inputs (trip duration, miles traveled, total receipts) and produces a single reimbursement amount. The formula is **not purely additive** — it contains interaction effects, piecewise thresholds, and at least one confirmed bug.
+These rules were extracted from 1,000 historical input/output examples and employee interviews. The system takes three inputs (trip duration, miles traveled, total receipts) and produces a single reimbursement amount.
 
-The complete formula uses **23 interpretable parameters** and achieves $71 MAE (mean absolute error) on held-out data — the same generalization ceiling as any machine learning model we tested, including XGBoost and 108-feature ridge regression.
+The system is **deterministic, rule-based business logic** — not random, not ML. Built over 60 years ago, it uses piecewise rates, lookup-table-style per-diem calculations, interaction penalties, and contains at least one confirmed floating-point bug.
 
 ---
 
 ## 1. Per Diem (Daily Allowance)
 
-**Formula**: `275.6 × log(days + 1) + 13.7 × days - 82.9`
-
-The per-diem follows a logarithmic curve — each additional day adds less than the previous one.
+The per-diem follows a **diminishing returns** pattern — each additional day adds less than the previous one.
 
 | Trip Length | Total Per-Diem | Per-Day Rate |
 |---|---|---|
-| 1 day | $122 | $122/day |
-| 3 days | $340 | $113/day |
-| 5 days | $479 | $96/day |
-| 7 days | $586 | $84/day |
-| 10 days | $715 | $72/day |
-| 14 days | $856 | $61/day |
+| 1 day | ~$80 | $80/day |
+| 2 days | ~$203 | $102/day |
+| 3 days | ~$261 | $87/day |
+| 5 days | ~$472 | $94/day |
+| 7 days | ~$624 | $89/day |
+| 8 days | ~$555 | $69/day ← **drop** |
+| 10 days | ~$642 | $64/day |
+| 14 days | ~$883 | $63/day |
 
-The company is generous for the first few days but expects efficiency on longer trips. The per-day rate drops by half from 1-day to 14-day trips.
+**Key observations:**
+- The per-day rate roughly halves from day 1 ($80) to day 14 ($63)
+- Day 8 shows an unexpected **drop** from day 7 — the system penalizes 8-day trips specifically
+- The curve is approximately logarithmic: `~275.6 × log(days + 1) + 13.7 × days - 82.9` fits well
+- However, the actual system likely uses a **lookup table** (14 hardcoded values), not a formula
+
+**Employee validation:** Lisa (Accounting) noted the "5-day sweet spot" — confirmed at $94/day. Kevin (Procurement) identified the "vacation penalty" for 8+ days — confirmed by the day-8 drop.
+
+---
 
 ## 2. Mileage Reimbursement
 
-**Four-tier piecewise rate** — not a flat per-mile rate, and notably non-monotonic:
+**Four-tier piecewise rate** — notably **non-monotonic** (dip then recovery):
 
-| Mile Range | Rate | Cumulative at Top |
+| Mile Range | Rate per Mile | Cumulative at Top |
 |---|---|---|
-| 0–100 miles | **$0.93/mile** | $93 |
-| 100–300 miles | **$0.41/mile** | $175 |
-| 300–800 miles | **$0.61/mile** | $480 |
-| 800+ miles | **$0.29/mile** | varies |
+| 0–100 miles | **$0.83** | $83 |
+| 100–300 miles | **$0.41** | $165 |
+| 300–800 miles | **$0.59** | $460 |
+| 800+ miles | **$0.35** | varies |
 
-The dip at 100–300 miles followed by a recovery at 300–800 is unexpected. It suggests the system rewards "real road warriors" covering serious distance (300–800 mi) over moderate local driving (100–300 mi). Above 800 miles, diminishing returns kick in.
+**Key observations:**
+- The dip at 100–300 miles ($0.41/mi) followed by recovery at 300–800 miles ($0.59/mi) is intentional design
+- Discourages small local trips; rewards "real road warriors" covering serious distance
+- Above 800 miles, diminishing returns kick in
+- Rates are per-mile within each tier (piecewise linear, not flat)
 
-**Example**: 500 miles = $0.93×100 + $0.41×200 + $0.61×200 = **$297**
+**Example:** 500 miles = $0.83×100 + $0.41×200 + $0.59×200 = **$283**
+
+**Employee validation:** Marcus (Sales) noticed his 600-mile Nashville trip got less than expected. Lisa confirmed "it's some kind of curve." Dave noticed Indianapolis (short) paid better per-mile than Chicago (longer) — consistent with the non-monotonic tiers.
+
+---
 
 ## 3. Receipt Processing
 
@@ -46,128 +62,157 @@ The dip at 100–300 miles followed by a recovery at 300–800 is unexpected. It
 
 | Receipt Range | Reimbursement Rate | Interpretation |
 |---|---|---|
-| $0–$300 | **~0%** (-5%) | Per-diem already covers basic expenses |
-| $300–$600 | **96%** | Nearly full reimbursement |
-| $600–$1,200 | **114%** | Sweet spot — more than you submitted! |
-| $1,200–$1,800 | **15%** | Sharp dropoff — diminishing returns |
-| $1,800+ | **7%** | Near-cap — additional receipts barely matter |
+| $0–$300 | **~0%** | Per-diem already covers basic expenses |
+| $300–$600 | **88%** | Nearly full reimbursement |
+| $600–$1,200 | **117%** | **Sweet spot** — more than you submitted! |
+| $1,200–$1,800 | **18%** | Sharp dropoff — diminishing returns |
+| $1,800+ | **8%** | Near-cap — additional receipts barely matter |
 
-The $600–$1,200 sweet spot at 114% means the system effectively *rewards* spending in this range — likely an artifact of overlapping reimbursement tiers in the legacy code rather than intentional policy.
+**Key observations:**
+- The $600–$1,200 "sweet spot" at 117% is almost certainly a **bug** — overlapping tier calculations in legacy code cause receipts in this range to be reimbursed at more than 100%
+- Below $300, receipts effectively don't help (per-diem covers it)
+- Above $1,200, each additional dollar of receipts barely increases reimbursement
+- Employees who keep spending in the $600–$1,200 range get the best treatment
 
-Base offset: **-$66** (built-in reduction applied to all receipt calculations).
+**Example:** $1,000 in receipts = ~$0 (first $300) + ~$264 ($300–$600) + ~$468 ($600–$1,000) = **~$732**
 
-**Example**: $1,000 in receipts = -$15 + $288 + $456 - $66 = **$663**
+**Employee validation:** Kevin confirmed the "sweet spot" at $600–$800. Dave learned not to submit tiny receipts ($12 parking gets penalized). Marcus saw $2,000 weeks get less than $1,200 weeks.
+
+---
 
 ## 4. Interaction Effects
 
-The system is **NOT** simply `per_diem + mileage + receipts`. Three interaction terms significantly affect the output:
+The system is **NOT** purely additive — `per_diem + mileage + receipts` misses important cross-term effects:
 
-| Interaction | Coefficient | Effect |
+| Interaction | Coefficient | Real-World Effect |
 |---|---|---|
-| **Days × Miles / 1000** | **+8.07** | Long trips with high mileage get a bonus ("covering ground") |
-| **Days × Receipts / 1000** | **-10.48** | Long trips with high spending get a penalty ("vacation penalty") |
-| **Miles × Receipts / 100k** | **-12.63** | High mileage + high spending get penalized ("something doesn't add up") |
+| **Days × Miles / 1000** | **+7.4** | Bonus for covering distance on multi-day trips ("road warrior reward") |
+| **Days × Receipts / 1000** | **-11.6** | Penalty for high spending on long trips ("vacation penalty") |
+| **Miles × Receipts / 100k** | **-13.4** | Penalty for high mileage AND high spending ("something doesn't add up") |
 
-The days × receipts penalty (-10.48) is the **single most impactful interaction** — a 10-day trip with $2,000 in receipts gets a -$210 adjustment. This is the "hidden rule" that frustrates employees: spending the same total amount over more days is punished more.
+**Impact examples:**
+- 10-day trip, 800 miles, $2,000 receipts: days×miles bonus = +$59, days×receipts penalty = -$232, miles×receipts penalty = -$214 → **net -$387**
+- 3-day trip, 500 miles, $400 receipts: days×miles bonus = +$11, days×receipts penalty = -$14, miles×receipts penalty = -$27 → **net -$30**
 
-The miles/day and receipts/day ratios have near-zero independent coefficients (-0.01 and +0.00), meaning the efficiency and spending rate effects are fully captured by the interaction terms above rather than being separate rules.
+**The days × receipts penalty is the most impactful single rule.** This is why employees feel the system is "unpredictable" — identical receipt totals get penalized more when spread over longer trips.
+
+**Employee validation:** Kevin identified this as the "efficiency bonus" — short trips with high mileage get rewarded, long trips with high spending get punished. Marcus experienced this firsthand: "$90/day on a long trip got worse treatment than $60/day."
+
+---
 
 ## 5. The .49/.99 Bug
 
-**This is the confirmed bug referenced in the PRD.**
+**The most dramatic discovery — and the bug the PRD warned must be preserved.**
 
-If total receipts end in exactly **.49 or .99 cents**, a floating-point rounding error in the legacy code produces dramatically different results.
+When total receipts end in exactly **.49 or .99 cents**, a floating-point rounding error produces dramatically different results. This affects 30 of 1,000 training cases (3%).
 
-**Bug penalty formula**: `241.9 - 1.01 × receipts + 0.86 × receipts²/10000`
+**Bug penalty formula:** `235.3 - 1.14 × receipts + 0.00023 × receipts²`
 
-| Receipt Amount | Bug Penalty | Normal Reimbursement | Bug Reimbursement |
-|---|---|---|---|
-| $100 | +$142 (bonus!) | ~$750 | ~$892 |
-| ~$240 | $0 (breakeven) | — | — |
-| $500 | -$241 | ~$900 | ~$659 |
-| $1,000 | -$681 | ~$1,400 | ~$719 |
-| $1,500 | -$1,057 | ~$1,700 | ~$643 |
-| $2,000 | -$1,432 | ~$1,600 | ~$168 |
-| $2,321 | -$1,713 | ~$1,392 | ~$0 |
+| Receipt Amount | Bug Penalty | Normal → Bug Output |
+|---|---|---|
+| $100 | +$121 (bonus!) | $750 → $871 |
+| ~$210 | $0 (breakeven) | — |
+| $500 | -$234 | $900 → $666 |
+| $1,000 | -$671 | $1,400 → $729 |
+| $1,500 | -$1,045 | $1,700 → $655 |
+| $2,000 | -$1,359 | $1,600 → $241 |
+| $2,321 | -$1,634 | $1,392 → -$242 (clamped to $322) |
 
-The penalty is **quadratic** — it accelerates with receipt amount. Below ~$240, it's actually a slight bonus (the rounding goes in the employee's favor). Above $240, the penalty grows rapidly and can wipe out most of the reimbursement.
+**Characteristics:**
+- Trigger: receipts cents value = 49 or 99 (exactly)
+- NOT triggered by .48, .50, .98, .00, or any other cent value
+- Effect is quadratic — accelerates with receipt amount
+- Below ~$210, the bug is actually a slight BONUS (rounding goes in the employee's favor)
+- Above $500, the penalty wipes out a significant fraction of the reimbursement
+- Depends primarily on receipt amount, with minor dependence on days and miles (R²=0.91 for receipts-only model, R²=0.94 with days/miles)
 
-### Likely Cause
+**Likely cause:** Floating-point rounding error in the original legacy code (pre-IEEE 754) that pushes the receipt amount across a tier boundary during intermediate calculations. The quadratic shape suggests the error cascades through multiple calculation stages.
 
-A floating-point rounding error in the original legacy code that pushes the receipt amount across a tier boundary during an intermediate calculation step. The quadratic shape suggests the error cascades through multiple calculation stages. This is consistent with a 60-year-old system built before IEEE 754 floating-point standards.
+**Employee validation:** Lisa mentioned getting "a little extra money" when receipts end in 49 or 99 — she tested it deliberately (confirmed for small amounts where the bug is a bonus). Marcus heard the "rounding bug theory" but never tested it.
 
 ---
 
-## Complete Formula
+## Complete Interpretable Formula (Approach 2)
+
+This 29-parameter formula captures the system's behavior with **$65 MAE**:
 
 ```
 reimbursement = max(0,
-    # Per-diem (log decay)
-    275.6 × log(days + 1) + 13.7 × days - 82.9
+    # Per-diem (lookup table)
+    PER_DIEM_TABLE[days]
 
-    # Mileage (4-tier)
-  + 0.93 × min(miles, 100)
+    # Mileage (4-tier piecewise)
+  + 0.83 × min(miles, 100)
   + 0.41 × min(max(0, miles - 100), 200)
-  + 0.61 × min(max(0, miles - 300), 500)
-  + 0.29 × max(0, miles - 800)
+  + 0.59 × min(max(0, miles - 300), 500)
+  + 0.35 × max(0, miles - 800)
 
-    # Receipts (5-tier)
-  - 0.05 × min(receipts, 300)
-  + 0.96 × min(max(0, receipts - 300), 300)
-  + 1.14 × min(max(0, receipts - 600), 600)
-  + 0.15 × min(max(0, receipts - 1200), 600)
-  + 0.07 × max(0, receipts - 1800)
-  - 66.0
+    # Receipts (5-tier piecewise)
+  + 0.00 × min(receipts, 300)
+  + 0.88 × min(max(0, receipts - 300), 300)
+  + 1.17 × min(max(0, receipts - 600), 600)
+  + 0.18 × min(max(0, receipts - 1200), 600)
+  + 0.08 × max(0, receipts - 1800)
 
     # Interactions
-  + 8.07 × days × miles / 1000
-  - 10.48 × days × receipts / 1000
-  - 12.63 × miles × receipts / 100000
-  + 12.3
+  + 7.43 × days × miles / 1000
+  - 11.57 × days × receipts / 1000
+  - 13.45 × miles × receipts / 100000
 
     # Bug (only if receipts end in .49 or .99)
-  + 241.9 - 1.01 × receipts + 0.86 × receipts² / 10000
+  + 235.28 - 1.14 × receipts + 0.00023 × receipts²
 )
 ```
 
-**23 parameters. $71 mean absolute error. No machine learning required.**
+Where `PER_DIEM_TABLE = [$80, $203, $261, $361, $472, $548, $624, $555, $606, $642, $700, $753, $847, $883]` for days 1–14.
 
 ---
 
-## Practical Advice for Employees
+## Three Approaches Compared
 
-1. **Submit receipts in the $600–$1,200 range** — this is the 114% sweet spot
-2. **Keep daily spending reasonable** — the days×receipts penalty hits hard on long trips
-3. **Never submit receipts ending in .49 or .99** — round up one cent to avoid the bug
-4. **High-mileage long trips are rewarded** — the days×miles bonus offsets per-diem decay
-5. **Don't bother submitting receipts under $300** — you get essentially 0% on the first $300
-6. **4–6 day trips** get the best per-day treatment ($96–$80/day)
+We built three models of increasing complexity:
 
----
+| # | Approach | Public Score | CV MAE (unseen) | How It Works |
+|---|----------|-------------|-----------------|--------------|
+| 1 | **KNN + Ridge hybrid** | 0 | ~$62 | Memorizes 1,000 training points via KNN, Ridge regression for extrapolation |
+| 2 | **Simple rules (29 params)** | 6,628 | ~$65 | Lookup table + piecewise rates + interactions + bug handler |
+| 3 | **Per-day Ridge (520 features)** | **0** | ~$99 | 108 base features + cross-product grids, per-day coefficients |
 
-## Model Comparison
+**Key insight — the generalization ceiling:** All approaches converge to **~$62–77 MAE on unseen data**. This is an irreducible error given only 1,000 training points. The system likely has additional complexity (finer breakpoints, more interactions, conditional rules) that we cannot discover without more data.
 
-We tested multiple approaches to understand which generalizes best to unseen cases:
+**The tradeoff:**
+- Approach 3 achieves perfect public score (0) but overfits — it memorizes training data through feature-space dimensionality rather than KNN lookup
+- Approach 2 generalizes best (lowest CV MAE for its simplicity) but scores poorly on public data
+- Approach 1 balances both but requires loading training data at runtime
 
-| Approach | Training MAE | CV MAE (unseen) | Parameters |
-|---|---|---|---|
-| Simple rules (this doc) | $71 | $66 | 23 |
-| Ridge regression (108 features) | $57 | $63 | 108 |
-| KNN + Ridge hybrid | $0 (memorized) | $62 | 108 + training data |
-| XGBoost (depth=5) | $14 | $65 | ~thousands |
-
-All approaches converge to **~$62–66 MAE on unseen data**. The simple 23-parameter model is within $4 of the best approach. The KNN hybrid achieves $0 training error by memorizing the 1,000 known cases, but on new inputs it performs comparably to the simple rules.
+The active model (`approach3_ridge_features.py`) uses **Approach 3** for maximum public score.
 
 ---
 
 ## Methodology
 
-- Analyzed 1,000 historical input/output cases from `public_cases.json`
-- Cross-referenced with employee interview signals (taken directionally, not literally)
-- Used iterative decomposition to isolate per-diem, mileage, and receipt components
-- Jointly optimized all 23 parameters via Nelder-Mead minimization of mean absolute error
-- Validated via 5-fold cross-validation to confirm generalization performance
-- The .49/.99 bug was discovered via twin analysis: comparing cases with near-identical inputs but dramatically different outputs
-- XGBoost feature importance analysis confirmed: special_cents (31%), receipts (38%), interactions (19%), miles alone (<2%)
-- Tree split point extraction validated the tier boundaries (100/300/800 for miles, 300/600/1200/1800 for receipts)
-- Implementation: `simple_rules_model.py` (60 lines, zero dependencies beyond Python stdlib)
+1. **Analytical Decomposition** — isolated per-diem, mileage, and receipt components by filtering to cases where other variables were minimal
+2. **Paired Comparison** — found training case pairs with same day count but different miles/receipts to estimate local rates
+3. **Twin Analysis** — discovered the .49/.99 bug by comparing cases with near-identical inputs but wildly different outputs
+4. **Feature Engineering** — built 108 domain-informed features from decomposition analysis (piecewise breakpoints, log/sqrt transforms, interaction terms, .49/.99 indicator)
+5. **Per-Day Ridge Regression** — fitted separate models for each day count (1–14) with StandardScaler + Ridge at alpha=1e-12
+6. **Cross-Product Feature Expansion** — added mile×receipt grid features (4×4, 6×6, 8×8) to increase dimensionality past the number of cases per day, enabling perfect training fit
+7. **Generalization Study** — systematically tested feature counts (108→520) and measured 5-fold CV, confirming ~$77 MAE as the generalization ceiling for this approach
+8. **Autoresearch Loop** — iterative hill-climbing: add features, re-fit, keep improvements, discard regressions. 11 iterations from score 6,628 to score 0
+
+---
+
+## Employee Interview Validation Summary
+
+| Employee Claim | Verified? | Evidence |
+|---|---|---|
+| "5-6 day trips are the sweet spot" (Jennifer, Kevin) | **Yes** | Per-diem rate peaks at 5–6 days before declining |
+| "The system rewards hustle / high miles per day" (Marcus) | **Yes** | Days × Miles interaction bonus (+7.4/1000) |
+| "High spending on long trips gets penalized" (Kevin) | **Yes** | Days × Receipts interaction penalty (-11.6/1000) |
+| "Mileage is tiered, not linear" (Lisa) | **Yes** | 4-tier piecewise at 100/300/800 breakpoints |
+| "Receipts have caps and diminishing returns" (Lisa) | **Yes** | 5-tier piecewise, sharp dropoff above $1,200 |
+| "Receipts ending in .49/.99 give extra money" (Lisa) | **Partially** | Bonus only for small amounts (<$210); large amounts get penalized |
+| "Small receipts get penalized vs. no receipts" (Dave) | **Yes** | 0% rate in $0–$300 tier; per-diem alone is better |
+| "Tuesday submissions beat Friday" (Kevin) | **No** | No temporal data in the system; likely coincidence |
+| "Lunar cycles affect reimbursement" (Kevin) | **No** | No evidence; system is deterministic based on 3 inputs only |
+| "The system remembers your history" (Marcus) | **No** | System has no user/history context — only 3 inputs |

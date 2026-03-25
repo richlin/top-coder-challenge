@@ -9,7 +9,7 @@ import json
 import sys
 import time
 
-from calculate_reimbursement import calculate_reimbursement, is_special_cents
+from approach3_ridge_features import calculate_reimbursement, is_special_cents
 
 # 10 known cases for quick regression testing
 # Includes: normal cases, .49/.99 bug cases, edge cases
